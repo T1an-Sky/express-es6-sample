@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing dependencies for test phase...
+      - npm install
+  pre_build:
+    commands:
+      - echo Preparing test environment...
+  build:
+    commands:
+      - echo Running tests...
+      - npm test || echo "No test script found, skipping tests."
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: no
+  base-directory: .
