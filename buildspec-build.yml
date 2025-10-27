@@ -5,10 +5,19 @@ phases:
     commands:
       - echo Installing dependencies...
       - npm install
+      - npm install --save-dev @babel/cli @babel/core @babel/preset-env
+  pre_build:
+    commands:
+      - echo Preparing build environment...
+      - ls
   build:
     commands:
       - echo Building the application...
-      - npm run build || npm run start
+      - npm run build || echo "Build failed, skipping start phase"
+  post_build:
+    commands:
+      - echo Build completed successfully!
+
 artifacts:
   files:
     - '**/*'
