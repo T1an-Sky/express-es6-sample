@@ -7,19 +7,28 @@ phases:
     commands:
       - echo "Installing npm@10 to avoid npm11 peer-deps issues"
       - npm i -g npm@10
-      - echo "Forcing devDependencies install"
-      - export NPM_CONFIG_PRODUCTION=false
-      - export NODE_ENV=development
-      - echo "Installing dependencies..."
-      - npm install --legacy-peer-deps --no-audit --no-fund
+
+      
+      - echo "Turning OFF production and installing devDependencies"
+      - npm config set production false
+      - npm config set audit false
+      - npm config set fund false
+      - npm config ls -l | grep production || true
+
+      
+      - echo "Installing dependencies (including devDependencies)..."
+      - npm ci --include=dev --legacy-peer-deps
+
   pre_build:
     commands:
-      - echo "Running unit tests..."
+      - echo "Running unit tests (ignore failures for demo)..."
       - npm test || echo "No tests or tests failed, continuing for demo."
+
   build:
     commands:
       - echo "Building (transpile with Babel)..."
       - npm run build
+
   post_build:
     commands:
       - echo "Build finished."
