@@ -10,21 +10,19 @@ phases:
       - npm --version
       - echo "Installing dependencies (including dev)..."
       - npm install --include=dev --legacy-peer-deps --no-audit --no-fund
-
+      # 确保本地安装的 CLI（如 babel、jest）可被找到
+      - export PATH="$PWD/node_modules/.bin:$PATH"
   pre_build:
     commands:
-      - echo "Pre-build: environment check"
-      - node --version
-      - npm --version
-
+      - echo "Optional tests (won't fail the build if missing)"
+      - npm test || echo "No tests or tests failed, continuing for pipeline demo."
   build:
     commands:
       - echo "Building (transpile with Babel)..."
       - npm run build
-
   post_build:
     commands:
-      - echo "Build finished."
+      - echo "Build finished. Preparing artifacts for CodePipeline/Elastic Beanstalk"
 
 artifacts:
   files:
