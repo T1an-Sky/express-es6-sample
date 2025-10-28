@@ -1,9 +1,5 @@
 version: 0.2
 
-env:
-  variables:
-    NODE_ENV: "production"
-
 phases:
   install:
     runtime-versions:
@@ -11,7 +7,9 @@ phases:
     commands:
       - echo "Installing npm@10 to avoid npm11 peer-deps issues"
       - npm i -g npm@10
-      - npm --version
+      - echo "Forcing devDependencies install"
+      - export NPM_CONFIG_PRODUCTION=false
+      - export NODE_ENV=development
       - echo "Installing dependencies..."
       - npm install --legacy-peer-deps --no-audit --no-fund
   pre_build:
@@ -29,5 +27,5 @@ phases:
 artifacts:
   files:
     - '**/*'
-  discard-paths: no
   base-directory: .
+  discard-paths: no
