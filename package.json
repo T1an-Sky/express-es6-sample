@@ -11,42 +11,34 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "morgan": "~1.9.1",
-    "nodemon": "^2.0.2",
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
-    "@babel/preset-env": "^7.8.4"
+    "morgan": "~1.9.1"
   },
   "devDependencies": {
-    "jest": "^25.1.0"
+    "@babel/cli": "7.26.5",
+    "@babel/core": "7.26.5",
+    "@babel/preset-env": "7.26.0",
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2"
   },
   "nodemonConfig": {
     "exec": "npm run dev",
-    "watch": [
-      "server/*",
-      "public/*"
-    ],
-    "ignore": [
-      "**/__tests__/**",
-      "*.test.js",
-      "*.spec.js"
-    ]
+    "watch": ["server/*", "public/*"],
+    "ignore": ["**/__tests__/**", "*.test.js", "*.spec.js"]
   },
   "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
+    "presets": ["@babel/preset-env"]
   },
   "jest": {
     "testEnvironment": "node"
   },
   "scripts": {
     "clean": "rm -rf dist-server",
-    "build": "npm run clean && babel ./server --out-dir dist-server",
-    "postinstall": "npm run build",
-    "start": "NODE_ENV=production node ./dist-server/bin/www",
-    "dev": "NODE_ENV=development node ./dist-server/bin/www",
-    "watch:dev": "nodemon",
-    "test": "jest || echo \"No tests\""
+    "transpile": "node ./node_modules/@babel/cli/bin/babel.js ./server --out-dir dist-server",
+    "build": "npm run clean && npm run transpile",
+    "server": "node ./dist-server/bin/www",
+    "dev": "NODE_ENV=development npm run server",
+    "prod": "NODE_ENV=production npm run server",
+    "start": "npm run prod",
+    "test": "jest"
   }
 }
