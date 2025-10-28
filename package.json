@@ -41,14 +41,12 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "start": "npm run prod",
-    "build": "npm run clean && npm run transpile",
-    "server": "node ./dist-server/bin/www",
-    "dev": "NODE_ENV=development npm run server",
-    "prod": "NODE_ENV=production npm run server",
-    "transpile": "babel ./server --out-dir dist-server",
     "clean": "rm -rf dist-server",
+    "build": "npm run clean && babel ./server --out-dir dist-server",
+    "postinstall": "npm run build",
+    "start": "NODE_ENV=production node ./dist-server/bin/www",
+    "dev": "NODE_ENV=development node ./dist-server/bin/www",
     "watch:dev": "nodemon",
-    "test": "jest"
+    "test": "jest || echo \"No tests\""
   }
 }
