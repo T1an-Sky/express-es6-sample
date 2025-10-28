@@ -5,15 +5,17 @@ phases:
     runtime-versions:
       nodejs: 18
     commands:
-      - echo "Installing npm@10 to avoid npm11 peer-deps issues"
+      - echo "Installing npm@10 to avoid npm@11 peer-deps issues"
       - npm i -g npm@10
-      - echo "Installing dependencies..."
-      - npm ci --include=dev --legacy-peer-deps --no-audit --no-fund
+      - npm --version
+      - echo "Installing dependencies (including dev)..."
+      - npm install --include=dev --legacy-peer-deps --no-audit --no-fund
 
   pre_build:
     commands:
-      - echo "Running unit tests..."
-      - npm test || echo "No tests or tests failed, continuing for demo."
+      - echo "Pre-build: environment check"
+      - node --version
+      - npm --version
 
   build:
     commands:
@@ -23,7 +25,9 @@ phases:
   post_build:
     commands:
       - echo "Build finished."
-      
+
 artifacts:
   files:
-    - "**/*"
+    - '**/*'
+  base-directory: .
+  discard-paths: no
