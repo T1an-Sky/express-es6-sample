@@ -7,21 +7,12 @@ phases:
     commands:
       - echo "Installing npm@10 to avoid npm11 peer-deps issues"
       - npm i -g npm@10
-
-      
-      - echo "Turning OFF production and installing devDependencies"
-      - npm config set production false
-      - npm config set audit false
-      - npm config set fund false
-      - npm config ls -l | grep production || true
-
-      
-      - echo "Installing dependencies (including devDependencies)..."
-      - npm ci --include=dev --legacy-peer-deps
+      - echo "Installing dependencies..."
+      - npm ci --include=dev --legacy-peer-deps --no-audit --no-fund
 
   pre_build:
     commands:
-      - echo "Running unit tests (ignore failures for demo)..."
+      - echo "Running unit tests..."
       - npm test || echo "No tests or tests failed, continuing for demo."
 
   build:
@@ -32,9 +23,7 @@ phases:
   post_build:
     commands:
       - echo "Build finished."
-
+      
 artifacts:
   files:
-    - '**/*'
-  base-directory: .
-  discard-paths: no
+    - "**/*"
