@@ -2,22 +2,24 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 18
     commands:
-      - echo Installing dependencies...
-      - npm install
-      - npm install --save-dev @babel/cli @babel/core @babel/preset-env
+      - echo "Installing npm@10 to avoid npm11 peer-deps issues"
+      - npm i -g npm@10
+      - npm --version
+      - echo "Installing dependencies..."
+      - npm ci --legacy-peer-deps --no-audit --no-fund
   pre_build:
     commands:
-      - echo Preparing build environment...
-      - ls
+      - echo "Pre-build step..."
   build:
     commands:
-      - echo Building the application...
-      - npm run build || echo "Build failed, skipping start phase"
+      - echo "Building app..."
+      - npm run build
   post_build:
     commands:
-      - echo Build completed successfully!
-
+      - echo "Build completed."
 artifacts:
   files:
     - '**/*'
