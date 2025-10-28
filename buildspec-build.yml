@@ -5,24 +5,27 @@ phases:
     runtime-versions:
       nodejs: 18
     commands:
-      - echo "Installing npm@10 to avoid npm@11 peer-deps issues"
+      - echo "Use npm@10 to avoid npm@11 peer-deps behavior"
       - npm i -g npm@10
       - npm --version
-      - echo "Installing dependencies (including dev)..."
+      - rm -f package-lock.json
+      - rm -rf node_modules
       - npm install --include=dev --legacy-peer-deps --no-audit --no-fund
-      # 确保本地安装的 CLI（如 babel、jest）可被找到
+      - npm i -D @babel/cli@7.26.4 @babel/core@7.26.0 @babel/preset-env@7.26.0 --no-audit --no-fund
       - export PATH="$PWD/node_modules/.bin:$PATH"
+      - npx babel --version || true
+      - node -v
   pre_build:
     commands:
-      - echo "Optional tests (won't fail the build if missing)"
-      - npm test || echo "No tests or tests failed, continuing for pipeline demo."
+      - echo "Run tests (soft-fail)"
+      - npm test || echo "No tests or tests failed, continuing."
   build:
     commands:
-      - echo "Building (transpile with Babel)..."
+      - echo "Transpile with Babel"
       - npm run build
   post_build:
     commands:
-      - echo "Build finished. Preparing artifacts for CodePipeline/Elastic Beanstalk"
+      - echo "Build finished. Preparing artifacts."
 
 artifacts:
   files:
