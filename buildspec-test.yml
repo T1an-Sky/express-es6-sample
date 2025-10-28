@@ -2,15 +2,19 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 18
     commands:
-      - echo Installing dependencies for test phase...
-      - npm install
+      - npm i -g npm@10
+      - npm --version
+      - echo "Installing deps for tests..."
+      - npm ci --legacy-peer-deps --no-audit --no-fund
   pre_build:
     commands:
-      - echo Preparing test environment...
+      - echo "Preparing test environment..."
   build:
     commands:
-      - echo Running tests...
+      - echo "Running tests..."
       - npm test || echo "No test script found, skipping tests."
 artifacts:
   files:
